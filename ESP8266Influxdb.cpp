@@ -16,6 +16,10 @@ Influxdb::Influxdb(const char *host, uint16_t port) : WiFiClient() {
         _host = host;
 }
 
+DB_RESPONSE Influxdb::setdb(const char *host, uint16_t port) {
+    _port = port;
+    _host = host;
+}
 DB_RESPONSE Influxdb::opendb(String db, String user, String password) {
         _db = "db=" + db + "&u=" + user + "&p=" + password;
 }
@@ -36,9 +40,9 @@ DB_RESPONSE Influxdb::write(String data) {
                 return _response;
         }
         String postHead = "POST /write?" + _db + " HTTP/1.1\r\n";
-        // postHead += "Host: " + localIP().toString() + ":" +
-        // localPort() + "\r\n";
-        // postHead += "Content-Type: application/x-www-form-urlencoded\r\n";
+        postHead += "Host: " + localIP().toString() + ":" +
+        localPort() + "\r\n";
+        postHead += "Content-Type: application/x-www-form-urlencoded\r\n";
         postHead += "Content-Length: " + String(data.length()) + "\r\n\r\n";
 
         DEBUG_PRINT("Writing data to " + String(_host) + ":" + String(_port));
